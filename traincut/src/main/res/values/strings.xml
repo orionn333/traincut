@@ -1,0 +1,13 @@
+<resources>
+    <!-- General -->
+    <string name="app_name">Traincut</string>
+    <string name="title_home">Home</string>
+    <string name="title_log">Log</string>
+    <string name="title_preferences">Preferences</string>
+    <string name="fab_add_content_desc">Add a new entry in the log</string>
+
+    <!-- Log fragment -->
+    <string name="entry_icon_desc">An icon which shows the image associated with the train, if available.</string>
+    <string name="entry_origin">Origin</string>
+    <string name="entry_destination">Destination</string>
+</resources>

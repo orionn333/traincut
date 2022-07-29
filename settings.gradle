@@ -12,5 +12,4 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "traincut"
-include ':app'
+include ':traincut'
