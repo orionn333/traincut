@@ -30,6 +30,11 @@ class LogViewModel : ViewModel() {
     }
     val destination: LiveData<String> = _destination
 
+    private val _tripDate = MutableLiveData<String>().apply {
+        value = "December 31st"
+    }
+    val tripDate: LiveData<String> = _tripDate
+
     private val _originTime = MutableLiveData<String>().apply {
         value = "09:30"
     }

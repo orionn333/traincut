@@ -70,6 +70,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                        <TextView
+                            android:id="@+id/textDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="December 31st" />
+
                         <ImageView
                             android:id="@+id/imageView"
                             android:layout_width="0dp"
@@ -79,10 +89,11 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintDimensionRatio="1:1"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/textDate"
+                            app:layout_constraintVertical_bias="0.0" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/text_log"
+                            android:id="@+id/textDestination"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
@@ -91,11 +102,11 @@
                             android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/destinationTime"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textDate"
                             tools:text="Destination" />
 
                         <TextView
-                            android:id="@+id/textView"
+                            android:id="@+id/textOrigin"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:paddingStart="1dp"
@@ -104,8 +115,9 @@
                             android:text="@string/entry_origin"
                             android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="@+id/text_log"
-                            app:layout_constraintTop_toBottomOf="@+id/text_log"
+                            app:layout_constraintStart_toStartOf="@+id/textDestination"
+                            app:layout_constraintTop_toBottomOf="@+id/textDestination"
+                            tools:ignore="TextContrastCheck"
                             tools:text="From Origin" />
 
                         <TextView
@@ -116,9 +128,9 @@
                             android:paddingTop="8dp"
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                            app:layout_constraintBottom_toBottomOf="@+id/text_log"
+                            app:layout_constraintBottom_toBottomOf="@+id/textDestination"
                             app:layout_constraintStart_toEndOf="@+id/imageView"
-                            app:layout_constraintTop_toTopOf="@+id/text_log"
+                            app:layout_constraintTop_toTopOf="@+id/textDestination"
                             tools:text="09:55" />
 
                         <TextView
@@ -129,7 +141,7 @@
                             android:textAlignment="center"
                             android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                             app:layout_constraintEnd_toEndOf="@+id/destinationTime"
-                            app:layout_constraintTop_toTopOf="@+id/textView"
+                            app:layout_constraintTop_toTopOf="@+id/textOrigin"
                             tools:text="09:30" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

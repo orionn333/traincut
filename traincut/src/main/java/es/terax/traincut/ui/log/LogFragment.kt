@@ -47,9 +47,13 @@ class LogFragment : Fragment() {
         _binding = FragmentLogBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textLog
+        val textDestination: TextView = binding.textDestination
         logViewModel.destination.observe(viewLifecycleOwner) {
-            textView.text = it
+            textDestination.text = it
+        }
+        val textDate: TextView = binding.textDate
+        logViewModel.tripDate.observe(viewLifecycleOwner) {
+            textDate.text = it
         }
         val originTime = binding.originTime
         logViewModel.originTime.observe(viewLifecycleOwner) {
