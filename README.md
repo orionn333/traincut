@@ -43,9 +43,9 @@ would follow the structure shown below:
 - **arrival**\*: Scheduled arrival date and time *in UTC*.
 - **name**: Train service type *(i.e.: International, Regional...)* or commercial name.
 - **trainNumber**: A train number that identifies the itinerary followed by the train.
-- **seat**
-- **seatClass**
-- **car** Car or wagon No.
+- **seat**: Seat number.
+- **seatClass**: Seat class.
+- **car**: Car or wagon No.
 - **cost**: Price of the train ticket
 - **currency**: The currency in which the price is expressed.
 - **realDepart**: Real departure date and time *in UTC*.
