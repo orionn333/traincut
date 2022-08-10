@@ -23,10 +23,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import es.terax.traincut.EntryModel
+import es.terax.traincut.R
+import es.terax.traincut.SQLHelper
 import es.terax.traincut.databinding.FragmentLogBinding
+import java.lang.Exception
 
 class LogFragment : Fragment() {
 
@@ -41,29 +49,62 @@ class LogFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val logViewModel =
-            ViewModelProvider(this)[LogViewModel::class.java]
+        /*val logViewModel =
+            ViewModelProvider(this)[LogViewModel::class.java]*/
 
         _binding = FragmentLogBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val databaseHandler = SQLHelper(requireContext(), null)
+        loadIntoList(databaseHandler)
 
-        val textDestination: TextView = binding.textDestination
-        logViewModel.destination.observe(viewLifecycleOwner) {
-            textDestination.text = it
-        }
-        val textDate: TextView = binding.textDate
-        logViewModel.tripDate.observe(viewLifecycleOwner) {
-            textDate.text = it
-        }
-        val originTime = binding.originTime
-        logViewModel.originTime.observe(viewLifecycleOwner) {
-            originTime.text = it
-        }
-        val destinationTime = binding.destinationTime
-        logViewModel.destinationTime.observe(viewLifecycleOwner) {
-            destinationTime.text = it
+        val floatingActionButton: FloatingActionButton = binding.floatingActionButton
+        val actionEntry = LogFragmentDirections.actionNavigationLogToEntryFragment(false)
+        floatingActionButton.setOnClickListener {
+            root.findNavController().navigate(actionEntry)
         }
         return root
+    }
+
+    private fun loadIntoList(databaseHandler: SQLHelper){
+        val dataList = ArrayList<EntryModel>()
+        val cursor = databaseHandler.getAllRow()!!
+
+        try {
+            if (cursor.moveToFirst()) {
+                val imageView2 = binding.imageView2
+                imageView2.visibility = View.GONE
+                do {
+                    val entryModel = EntryModel()
+                    entryModel.entryId = cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ID))
+                    entryModel.entryOrigin =
+                        cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ORIGIN))
+                    entryModel.entryDestination =
+                        cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DESTINATION))
+                    entryModel.entryDeparture =
+                        cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DEPARTURE))
+                    entryModel.entryArrival =
+                        cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ARRIVAL))
+                    dataList.add(entryModel)
+                } while (cursor.moveToNext())
+                val recyclerView: RecyclerView = binding.recyclerView
+                recyclerView.layoutManager =
+                    LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+                recyclerView.adapter = LogAdapter(dataList, requireContext(), findNavController())
+            }
+            else {
+                binding.txtEmpty.text = getString(R.string.log_empty)
+            }
+        } catch (e: Exception)
+        {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.error_entry_load))
+                .setMessage(resources.getString(R.string.error_entry_load_desc))
+                .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
+                    // Do nothing.
+                    // TODO: Provide a solution.
+                }
+                .show()
+        }
     }
 
     override fun onDestroyView() {

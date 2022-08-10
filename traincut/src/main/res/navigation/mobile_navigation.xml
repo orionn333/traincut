@@ -34,11 +34,29 @@
         android:id="@+id/navigation_log"
         android:name="es.terax.traincut.ui.log.LogFragment"
         android:label="@string/title_log"
-        tools:layout="@layout/fragment_log" />
+        tools:layout="@layout/fragment_log" >
+        <action
+            android:id="@+id/action_navigation_log_to_entryFragment"
+            app:destination="@id/entryFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_preferences"
         android:name="es.terax.traincut.ui.preferences.PreferencesFragment"
         android:label="@string/title_preferences"
         tools:layout="@layout/fragment_preferences" />
+    <fragment
+        android:id="@+id/entryFragment"
+        android:name="es.terax.traincut.ui.entry.EntryFragment"
+        android:label="@string/add_entry"
+        tools:layout="@layout/fragment_entry" >
+        <argument
+            android:name="isEdit"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="editId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

@@ -5,9 +5,20 @@
     <string name="title_log">Log</string>
     <string name="title_preferences">Preferences</string>
     <string name="fab_add_content_desc">Add a new entry in the log</string>
+    <string name="add_entry">Add entry</string>
+    <string name="edit_entry">Edit entry</string>
+    <string name="accept">Accept</string>
 
     <!-- Log fragment -->
+    <string name="log_empty">No entries were found</string>
+    <string name="log_empty_content_desc">No entries picture</string>
     <string name="entry_icon_desc">An icon which shows the image associated with the train, if available.</string>
+
+    <!-- Entry fragment -->
     <string name="entry_origin">Origin</string>
     <string name="entry_destination">Destination</string>
+    <string name="entry_save">Save</string>
+    <string name="content_desc_entry_save">Saves the information given by the user into the log.</string>
+    <string name="error_entry_load">Data retrieving error</string>
+    <string name="error_entry_load_desc">An error has occurred while trying to retrieve log\'s information.</string>
 </resources>
