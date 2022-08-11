@@ -39,10 +39,11 @@ class LogAdapter(private val dataList: ArrayList<EntryModel>,
         val viewBinding = ListCardBinding.bind(view)
 
         fun setListener(dataListed: EntryModel){
-            val actionEntry =
-                LogFragmentDirections.actionNavigationLogToEntryFragment(true, dataListed.entryId)
+            val actionView =
+                LogFragmentDirections.actionNavigationLogToViewFragment(dataListed.entryId,
+                    dataListed.entryPosition)
             viewBinding.materialCardView.setOnClickListener{
-                navController.navigate(actionEntry)
+                navController.navigate(actionView)
             }
         }
     }

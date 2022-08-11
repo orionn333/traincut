@@ -36,6 +36,9 @@
         android:label="@string/title_log"
         tools:layout="@layout/fragment_log" >
         <action
+            android:id="@+id/action_navigation_log_to_viewFragment"
+            app:destination="@id/viewFragment" />
+        <action
             android:id="@+id/action_navigation_log_to_entryFragment"
             app:destination="@id/entryFragment" />
     </fragment>
@@ -58,5 +61,23 @@
             android:name="editId"
             app:argType="integer"
             android:defaultValue="0" />
+        <argument
+            android:name="positionId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewFragment"
+        android:name="es.terax.traincut.ui.view.ViewFragment"
+        android:label="@string/view_entry">
+        <action
+            android:id="@+id/action_viewFragment_to_entryFragment"
+            app:destination="@id/entryFragment" />
+        <argument
+            android:name="entryId"
+            app:argType="integer" />
+        <argument
+            android:name="positionId"
+            app:argType="integer" />
     </fragment>
 </navigation>

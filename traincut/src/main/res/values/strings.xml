@@ -5,6 +5,7 @@
     <string name="title_log">Log</string>
     <string name="title_preferences">Preferences</string>
     <string name="fab_add_content_desc">Add a new entry in the log</string>
+    <string name="view_entry">View entry</string>
     <string name="add_entry">Add entry</string>
     <string name="edit_entry">Edit entry</string>
     <string name="accept">Accept</string>
@@ -13,6 +14,12 @@
     <string name="log_empty">No entries were found</string>
     <string name="log_empty_content_desc">No entries picture</string>
     <string name="entry_icon_desc">An icon which shows the image associated with the train, if available.</string>
+
+    <!-- View fragment -->
+    <string name="view_edit">Edit</string>
+    <string name="content_desc_view_edit">Displays a form in which the entry data can be modified.</string>
+    <string name="view_delete">Delete</string>
+    <string name="content_desc_view_delete">Deletes this entry from the log</string>
 
     <!-- Entry fragment -->
     <string name="entry_origin">Origin</string>

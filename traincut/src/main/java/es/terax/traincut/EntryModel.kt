@@ -21,6 +21,7 @@ package es.terax.traincut
 
 class EntryModel {
     var entryId: Int = 0
+    var entryPosition: Int = 0
     var entryOrigin: String = ""
     var entryDestination: String = ""
     var entryDeparture: String = ""

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package es.terax.traincut.ui.entry
+package es.terax.traincut.ui.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,77 +31,47 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import es.terax.traincut.EntryModel
 import es.terax.traincut.R
 import es.terax.traincut.SQLHelper
-import es.terax.traincut.databinding.FragmentEntryBinding
+import es.terax.traincut.databinding.FragmentViewBinding
 
-class EntryFragment : Fragment() {
-    private var _binding: FragmentEntryBinding? = null
+class ViewFragment: Fragment() {
+    private var _binding: FragmentViewBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val args: EntryFragmentArgs by navArgs()
+    private val args: ViewFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEntryBinding.inflate(inflater, container, false)
+        _binding = FragmentViewBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val topAppBar = binding.topAppBar
         val databaseHandler = SQLHelper(requireContext(), null)
 
-        val inputOrigin = binding.inputOrigin
-        val inputDestination = binding.inputDestination
+        val inputOrigin = binding.displayOrigin
+        val inputDestination = binding.displayDestination
+
+        val entryData = getEntryData(args.positionId, databaseHandler)
+        inputOrigin.text = entryData.entryOrigin
+        inputDestination.text = entryData.entryDestination
         topAppBar.setNavigationOnClickListener {
             root.findNavController().navigateUp()
         }
-        if (args.isEdit) {
-            topAppBar.title = getString(R.string.edit_entry)
-            // Now, we load the entry data from the ID provided by the action argument.
-            val entryData = getEntryData(args.positionId)
-            inputOrigin.setText(entryData.entryOrigin)
-            inputDestination.setText(entryData.entryDestination)
-        }
+        val actionEntry =
+            ViewFragmentDirections.actionViewFragmentToEntryFragment(true, args.entryId, args.positionId)
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId)
             {
-                R.id.actionSave -> {
-                    if (args.isEdit) {
-                        databaseHandler.updateRow(args.editId.toString(),
-                            inputOrigin.text.toString(),
-                            inputDestination.text.toString(),
-                            "",
-                            "",
-                            "",
-                            0,
-                            "",
-                            "",
-                            0,
-                            0.00,
-                            "",
-                            "",
-                            "",
-                            "",
-                            "")
-                    } else {
-                        databaseHandler.insertRow(inputOrigin.text.toString(),
-                            inputDestination.text.toString(),
-                            "",
-                            "",
-                            "",
-                            0,
-                            "",
-                            "",
-                            0,
-                            0.0,
-                            "",
-                            "",
-                            "",
-                            "",
-                            "")
-                    }
-                    root.findNavController().navigateUp()
+                R.id.actionEdit -> {
+                    root.findNavController().navigate(actionEntry)
+                    true
+                }
+                R.id.actionDelete -> {
+                    databaseHandler.deleteRow(args.entryId.toString())
+                    findNavController().navigateUp()
                     true
                 }
                 else -> false
@@ -110,8 +80,7 @@ class EntryFragment : Fragment() {
         return root
     }
 
-    private fun getEntryData(entryId: Int): EntryModel {
-        val databaseHandler = SQLHelper(requireContext(), null)
+    private fun getEntryData(entryId: Int, databaseHandler: SQLHelper): EntryModel {
         val cursor = databaseHandler.getAllRow()!!
         return if (cursor.moveToPosition(entryId)) {
             val entryModel = EntryModel()

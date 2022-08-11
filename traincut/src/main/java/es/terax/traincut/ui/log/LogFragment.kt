@@ -58,9 +58,9 @@ class LogFragment : Fragment() {
         loadIntoList(databaseHandler)
 
         val floatingActionButton: FloatingActionButton = binding.floatingActionButton
-        val actionEntry = LogFragmentDirections.actionNavigationLogToEntryFragment(false)
+        val actionEntry = LogFragmentDirections.actionNavigationLogToEntryFragment()
         floatingActionButton.setOnClickListener {
-            root.findNavController().navigate(actionEntry)
+            findNavController().navigate(actionEntry)
         }
         return root
     }
@@ -75,6 +75,7 @@ class LogFragment : Fragment() {
                 imageView2.visibility = View.GONE
                 do {
                     val entryModel = EntryModel()
+                    entryModel.entryPosition = cursor.position
                     entryModel.entryId = cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ID))
                     entryModel.entryOrigin =
                         cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ORIGIN))

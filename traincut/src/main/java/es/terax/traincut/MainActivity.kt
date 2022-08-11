@@ -20,6 +20,7 @@
 package es.terax.traincut
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -40,9 +41,18 @@ class MainActivity : AppCompatActivity() {
         DynamicColors.applyToActivitiesIfAvailable(application)
 
         val navView: BottomNavigationView = binding.navView
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main)
-                as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main)
+                    as NavHostFragment
         val navController = navHostFragment.navController
-        navView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_home -> navView.visibility = View.VISIBLE
+                R.id.navigation_log -> navView.visibility = View.VISIBLE
+                R.id.navigation_preferences -> navView.visibility = View.VISIBLE
+                else -> navView.visibility = View.GONE
+            }
+            navView.setupWithNavController(navController)
+        }
     }
 }
