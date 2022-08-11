@@ -32,6 +32,10 @@ import es.terax.traincut.EntryModel
 import es.terax.traincut.R
 import es.terax.traincut.SQLHelper
 import es.terax.traincut.databinding.FragmentViewBinding
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class ViewFragment: Fragment() {
     private var _binding: FragmentViewBinding? = null
@@ -53,10 +57,24 @@ class ViewFragment: Fragment() {
 
         val inputOrigin = binding.displayOrigin
         val inputDestination = binding.displayDestination
+        val inputDeparture = binding.displayDeparture
+        val inputArrival = binding.displayArrival
 
         val entryData = getEntryData(args.positionId, databaseHandler)
         inputOrigin.text = entryData.entryOrigin
         inputDestination.text = entryData.entryDestination
+        // We convert the date into a human readable format.
+        val departDateTime = LocalDateTime.ofEpochSecond(entryData.entryDeparture,0,
+            ZoneOffset.UTC)
+        val arrivalDateTime = LocalDateTime.ofEpochSecond(entryData.entryArrival, 0,
+            ZoneOffset.UTC)
+        val format = DateTimeFormatter.ofLocalizedDateTime(
+            FormatStyle.MEDIUM,
+            FormatStyle.SHORT)
+        val departFormatted: String = departDateTime.format(format)
+        val arrivalFormatted: String = arrivalDateTime.format(format)
+        inputDeparture.text = departFormatted
+        inputArrival.text = arrivalFormatted
         topAppBar.setNavigationOnClickListener {
             root.findNavController().navigateUp()
         }
@@ -70,8 +88,19 @@ class ViewFragment: Fragment() {
                     true
                 }
                 R.id.actionDelete -> {
-                    databaseHandler.deleteRow(args.entryId.toString())
-                    findNavController().navigateUp()
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(resources.getString(R.string.view_delete_dialog))
+                        .setMessage(resources.getString(R.string.view_delete_dialog_desc))
+                        .setIcon(R.drawable.ic_baseline_delete_fg_24)
+                        .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                            // Abort the entry deletion.
+                        }
+                        .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
+                            // Proceed with the entry deletion.
+                            databaseHandler.deleteRow(args.entryId.toString())
+                            findNavController().navigateUp()
+                        }
+                        .show()
                     true
                 }
                 else -> false
@@ -90,9 +119,9 @@ class ViewFragment: Fragment() {
             entryModel.entryDestination =
                 cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DESTINATION))
             entryModel.entryDeparture =
-                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DEPARTURE))
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DEPARTURE))
             entryModel.entryArrival =
-                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ARRIVAL))
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ARRIVAL))
             entryModel
         } else {
             MaterialAlertDialogBuilder(requireContext())

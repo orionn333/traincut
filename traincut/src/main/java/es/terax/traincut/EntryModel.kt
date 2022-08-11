@@ -24,8 +24,8 @@ class EntryModel {
     var entryPosition: Int = 0
     var entryOrigin: String = ""
     var entryDestination: String = ""
-    var entryDeparture: String = ""
-    var entryArrival: String = ""
+    var entryDeparture: Long = 0
+    var entryArrival: Long = 0
     var entryName: String = ""
     var entryTrainNumber: Int = 0
     var entrySeat: String = ""

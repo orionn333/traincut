@@ -25,10 +25,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import es.terax.traincut.EntryModel
 import es.terax.traincut.R
 import es.terax.traincut.databinding.ListCardBinding
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import kotlin.collections.ArrayList
 
 class LogAdapter(private val dataList: ArrayList<EntryModel>,
                  private val context: Context,
@@ -58,7 +62,19 @@ class LogAdapter(private val dataList: ArrayList<EntryModel>,
 
         holder.viewBinding.textOrigin.text = entryModel.entryOrigin
         holder.viewBinding.textDestination.text = entryModel.entryDestination
-        holder.viewBinding.textDate.text = entryModel.entryDeparture
+        // We convert the date into a human readable format.
+        val departDateTime = LocalDateTime.ofEpochSecond(entryModel.entryDeparture,0,
+            ZoneOffset.UTC)
+        val arrivalDateTime = LocalDateTime.ofEpochSecond(entryModel.entryArrival, 0,
+            ZoneOffset.UTC)
+        val format = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+        val formatted: String = departDateTime.format(format)
+        holder.viewBinding.textDate.text = formatted
+        val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+        val departureTime: String = departDateTime.format(timeFormat)
+        val arrivalTime: String = arrivalDateTime.format(timeFormat)
+        holder.viewBinding.originTime.text = departureTime
+        holder.viewBinding.destinationTime.text = arrivalTime
         holder.setListener(entryModel)
     }
 

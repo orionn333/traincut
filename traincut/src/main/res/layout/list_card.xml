@@ -76,12 +76,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:text="@string/entry_destination"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/destinationTime"
-                app:layout_constraintTop_toBottomOf="@+id/textDate"
+                app:layout_constraintTop_toBottomOf="@+id/textOrigin"
                 tools:text="Destination" />
 
             <TextView
@@ -89,22 +89,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingStart="1dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="1dp"
-                android:paddingBottom="8dp"
                 android:text="@string/entry_origin"
                 android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textDestination"
-                app:layout_constraintTop_toBottomOf="@+id/textDestination"
+                app:layout_constraintTop_toBottomOf="@+id/textDate"
                 tools:ignore="TextContrastCheck"
-                tools:text="From Origin" />
+                tools:text="@string/entry_origin" />
 
             <TextView
                 android:id="@+id/destinationTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                 app:layout_constraintBottom_toBottomOf="@+id/textDestination"
@@ -116,7 +116,7 @@
                 android:id="@+id/originTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                 app:layout_constraintEnd_toEndOf="@+id/destinationTime"

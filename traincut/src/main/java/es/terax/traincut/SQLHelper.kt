@@ -31,22 +31,22 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     override fun onCreate(dataBase: SQLiteDatabase) {
         dataBase.execSQL("CREATE TABLE $TABLE_NAME " +
                 "($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_ORIGIN TEXT, " +
-                "$COLUMN_DESTINATION TEXT, $COLUMN_DEPARTURE DATETIME, " +
-                "$COLUMN_ARRIVAL DATETIME, $COLUMN_NAME TEXT, $COLUMN_TRAIN_NUMBER INTEGER, " +
+                "$COLUMN_DESTINATION TEXT, $COLUMN_DEPARTURE INT, " +
+                "$COLUMN_ARRIVAL INT, $COLUMN_NAME TEXT, $COLUMN_TRAIN_NUMBER INTEGER, " +
                 "$COLUMN_SEAT TEXT, $COLUMN_SEAT_CLASS TEXT, $COLUMN_CAR INTEGER, $COLUMN_COST DOUBLE, " +
-                "$COLUMN_CURRENCY TEXT, $COLUMN_REAL_DEPART DATETIME, $COLUMN_REAL_ARRIVAL DATETIME, " +
+                "$COLUMN_CURRENCY TEXT, $COLUMN_REAL_DEPART INT, $COLUMN_REAL_ARRIVAL INT, " +
                 "$COLUMN_SERIES TEXT, $COLUMN_COMMENTS TEXT)"
         )
     }
 
-    // TODO: Try to keep user data instead of just deleting everything.
     override fun onUpgrade(dataBase: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        // Implement version upgrade mechanism in case of version change.
         dataBase.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
         onCreate(dataBase)
     }
 
     // TODO: Change string for datetime.
-    fun insertRow(origin: String, destination: String, departure: String, arrival: String,
+    fun insertRow(origin: String, destination: String, departure: Long, arrival: Long,
     name: String, trainNumber: Int, seat: String, seatClass: String, car: Int, cost: Double,
     currency: String, realDeparture: String, realArrival: String, series: String, comments: String) {
         val values = ContentValues()
@@ -72,8 +72,8 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     // TODO: Change string for datetime.
-    fun updateRow(rowId: String, origin: String, destination: String, departure: String,
-                  arrival: String, name: String, trainNumber: Int, seat: String, seatClass: String,
+    fun updateRow(rowId: String, origin: String, destination: String, departure: Long,
+                  arrival: Long, name: String, trainNumber: Int, seat: String, seatClass: String,
                   car: Int, cost: Double, currency: String, realDeparture: String,
                   realArrival: String, series: String, comments: String) {
         val values = ContentValues()

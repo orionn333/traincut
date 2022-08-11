@@ -9,6 +9,7 @@
     <string name="add_entry">Add entry</string>
     <string name="edit_entry">Edit entry</string>
     <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Log fragment -->
     <string name="log_empty">No entries were found</string>
@@ -20,13 +21,18 @@
     <string name="content_desc_view_edit">Displays a form in which the entry data can be modified.</string>
     <string name="view_delete">Delete</string>
     <string name="content_desc_view_delete">Deletes this entry from the log</string>
+    <string name="view_delete_dialog">Do you really want to proceed?</string>
 
     <!-- Entry fragment -->
     <string name="entry_origin">Origin</string>
     <string name="entry_destination">Destination</string>
+    <string name="entry_departure">Departure</string>
+    <string name="entry_arrival">Arrival</string>
     <string name="entry_save">Save</string>
     <string name="content_desc_entry_save">Saves the information given by the user into the log.</string>
     <string name="error_entry_load">Data retrieving error</string>
     <string name="error_entry_load_desc">An error has occurred while trying to retrieve log\'s information.</string>
     <string name="error_entry_row_desc">The requested entry wasn\'t found in the log.\nThis may be due to a bug.</string>
+    <string name="error_mandatory_field">Please fill this void in order to continue</string>
+    <string name="view_delete_dialog_desc">This will <strong>permanently</strong> remove this entry from the log.</string>
 </resources>
