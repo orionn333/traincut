@@ -26,6 +26,10 @@ import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import es.terax.traincut.EntryModel
 import es.terax.traincut.R
 import es.terax.traincut.SQLHelper
 import es.terax.traincut.databinding.FragmentEntryBinding
@@ -36,6 +40,7 @@ class EntryFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val args: EntryFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,11 +57,51 @@ class EntryFragment : Fragment() {
         topAppBar.setNavigationOnClickListener {
             root.findNavController().navigateUp()
         }
+        if (args.isEdit) {
+            topAppBar.title = getString(R.string.edit_entry)
+            // Now, we load the entry data from the ID provided by the action argument.
+            val entryData = getEntryData(args.editId)
+            inputOrigin.setText(entryData.entryOrigin)
+            inputDestination.setText(entryData.entryDestination)
+        }
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId)
             {
                 R.id.actionSave -> {
-                    databaseHandler.insertRow(inputOrigin.text.toString(),inputDestination.text.toString(),"","","",0,"","",0,0.0,"","","","","")
+                    if (args.isEdit) {
+                        databaseHandler.updateRow(args.editId.toString(),
+                            inputOrigin.text.toString(),
+                            inputDestination.text.toString(),
+                            "",
+                            "",
+                            "",
+                            0,
+                            "",
+                            "",
+                            0,
+                            0.00,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "")
+                    } else {
+                        databaseHandler.insertRow(inputOrigin.text.toString(),
+                            inputDestination.text.toString(),
+                            "",
+                            "",
+                            "",
+                            0,
+                            "",
+                            "",
+                            0,
+                            0.0,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "")
+                    }
                     root.findNavController().navigateUp()
                     true
                 }
@@ -64,6 +109,35 @@ class EntryFragment : Fragment() {
             }
         }
         return root
+    }
+
+    private fun getEntryData(entryId: Int): EntryModel {
+        val databaseHandler = SQLHelper(requireContext(), null)
+        val cursor = databaseHandler.getAllRow()!!
+        return if (cursor.move(entryId)) {
+            val entryModel = EntryModel()
+            entryModel.entryId = cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ID))
+            entryModel.entryOrigin =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ORIGIN))
+            entryModel.entryDestination =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DESTINATION))
+            entryModel.entryDeparture =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DEPARTURE))
+            entryModel.entryArrival =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ARRIVAL))
+            entryModel
+        } else {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.error_entry_load))
+                .setMessage(resources.getString(R.string.error_entry_row_desc))
+                .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
+                    // Do nothing.
+                    // TODO: Provide a solution.
+                }
+                .show()
+            findNavController().navigateUp()
+            EntryModel()
+        }
     }
 
     override fun onDestroyView() {

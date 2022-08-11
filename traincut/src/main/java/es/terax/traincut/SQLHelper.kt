@@ -74,7 +74,7 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     // TODO: Change string for datetime.
     fun updateRow(rowId: String, origin: String, destination: String, departure: String,
                   arrival: String, name: String, trainNumber: Int, seat: String, seatClass: String,
-                  car: Int, cost: Double, currency: Currency, realDeparture: String,
+                  car: Int, cost: Double, currency: String, realDeparture: String,
                   realArrival: String, series: String, comments: String) {
         val values = ContentValues()
         values.put(COLUMN_ORIGIN, origin)
@@ -87,7 +87,7 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(COLUMN_SEAT_CLASS, seatClass)
         values.put(COLUMN_CAR, car)
         values.put(COLUMN_COST, cost)
-        values.put(COLUMN_CURRENCY, currency.toString())
+        values.put(COLUMN_CURRENCY, currency)
         values.put(COLUMN_REAL_DEPART, realDeparture)
         values.put(COLUMN_REAL_ARRIVAL, realArrival)
         values.put(COLUMN_SERIES, series)

@@ -21,4 +21,5 @@
     <string name="content_desc_entry_save">Saves the information given by the user into the log.</string>
     <string name="error_entry_load">Data retrieving error</string>
     <string name="error_entry_load_desc">An error has occurred while trying to retrieve log\'s information.</string>
+    <string name="error_entry_row_desc">The requested entry wasn\'t found in the log.\nThis may be due to a bug.</string>
 </resources>
