@@ -44,10 +44,11 @@
                 android:id="@+id/space"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fieldArrival" />
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxArrival" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fieldOrigin"
@@ -91,6 +92,7 @@
                     android:id="@+id/inputDestination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
                     android:inputType="textPersonName|textCapSentences"
                     android:maxLength="50"
                     tools:ignore="TextContrastCheck" />
@@ -115,9 +117,38 @@
                     android:id="@+id/inputDeparture"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contextClickable="false"
+                    android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:inputType="none|datetime"
+                    android:inputType="datetime"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldRealDeparture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="@string/entry_real_departure"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldDeparture"
+                app:layout_constraintWidth_max="380dp"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_today_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputRealDeparture"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contextClickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="datetime"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -132,7 +163,7 @@
                 android:hint="@string/entry_arrival"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fieldDeparture"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxDeparture"
                 app:layout_constraintWidth_max="380dp"
                 app:startIconDrawable="@drawable/ic_baseline_calendar_today_24">
 
@@ -140,9 +171,38 @@
                     android:id="@+id/inputArrival"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contextClickable="false"
+                    android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:inputType="none|datetime"
+                    android:inputType="datetime"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldRealArrival"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="@string/entry_real_arrival"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldArrival"
+                app:layout_constraintWidth_max="380dp"
+                app:startIconDrawable="@drawable/ic_baseline_calendar_today_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputRealArrival"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contextClickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="datetime"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -151,13 +211,12 @@
                 android:id="@+id/fieldName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:hint="@string/entry_name"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toStartOf="@+id/space"
                 app:layout_constraintStart_toStartOf="@+id/fieldArrival"
-                app:layout_constraintTop_toBottomOf="@+id/fieldArrival"
+                app:layout_constraintTop_toTopOf="@+id/space"
                 app:layout_constraintWidth_max="190dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -166,6 +225,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName|textCapSentences"
                     android:maxLength="50"
+                    android:nextFocusUp="@+id/inputArrival"
+                    android:nextFocusDown="@+id/inputTrainNumber"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -175,12 +236,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:hint="@string/entry_train_number"
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="@+id/fieldArrival"
                 app:layout_constraintStart_toEndOf="@+id/space"
-                app:layout_constraintTop_toBottomOf="@+id/fieldArrival"
+                app:layout_constraintTop_toTopOf="@+id/space"
                 app:layout_constraintWidth_max="190dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -189,6 +249,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="none|number"
                     android:maxLength="10"
+                    android:nextFocusUp="@+id/inputName"
+                    android:nextFocusDown="@+id/inputSeat"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -212,6 +274,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textUri|none"
                     android:maxLength="5"
+                    android:nextFocusUp="@+id/inputTrainNumber"
+                    android:nextFocusDown="@+id/inputSeatClass"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -235,6 +299,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="none|textCapSentences"
                     android:maxLength="25"
+                    android:nextFocusUp="@+id/inputSeat"
+                    android:nextFocusDown="@+id/inputCar"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -245,10 +311,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="32dp"
                 android:hint="@string/entry_car"
                 app:endIconMode="clear_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/space"
                 app:layout_constraintStart_toStartOf="@+id/fieldArrival"
                 app:layout_constraintTop_toBottomOf="@+id/fieldSeat"
@@ -260,9 +324,90 @@
                     android:layout_height="wrap_content"
                     android:inputType="none|number"
                     android:maxLength="2"
+                    android:nextFocusUp="@+id/inputSeatClass"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldSeries"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/entry_series"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/fieldArrival"
+                app:layout_constraintStart_toEndOf="@+id/space"
+                app:layout_constraintTop_toBottomOf="@+id/fieldSeat"
+                app:layout_constraintWidth_max="190dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputSeries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25"
+                    android:nextFocusUp="@+id/inputCar"
+                    android:nextFocusDown="@+id/inputComments"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldComments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:hint="@string/entry_comments"
+                android:nestedScrollingEnabled="false"
+                app:counterEnabled="true"
+                app:counterMaxLength="1000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldCar"
+                app:layout_constraintWidth_max="380dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputComments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine|text|textCapSentences"
+                    android:maxLength="1000"
+                    android:nextFocusUp="@+id/inputSeries"
+                    android:singleLine="false"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkBoxDeparture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/entry_late_departure"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldRealDeparture"
+                app:layout_constraintWidth_max="380dp"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkBoxArrival"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/entry_late_arrival"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldRealArrival"
+                app:layout_constraintWidth_max="380dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

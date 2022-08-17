@@ -78,6 +78,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/displayDestination" />
 
             <TextView
+                android:id="@+id/fieldRealDeparture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/entry_real_departure"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/displayDeparture" />
+
+            <TextView
                 android:id="@+id/fieldArrival"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -88,7 +101,20 @@
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/displayDeparture" />
+                app:layout_constraintTop_toBottomOf="@+id/displayRealDeparture" />
+
+            <TextView
+                android:id="@+id/fieldRealArrival"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/entry_real_arrival"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/displayArrival" />
 
             <TextView
                 android:id="@+id/fieldName"
@@ -101,7 +127,7 @@
                 app:endIconMode="clear_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/displayArrival" />
+                app:layout_constraintTop_toBottomOf="@+id/displayRealArrival" />
 
             <TextView
                 android:id="@+id/fieldTrainNumber"
@@ -156,6 +182,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/displaySeatClass" />
 
             <TextView
+                android:id="@+id/fieldSeries"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/entry_series"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/displayCar" />
+
+            <TextView
+                android:id="@+id/fieldComments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/entry_comments"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/displaySeries" />
+
+            <TextView
                 android:id="@+id/displayOrigin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -195,6 +247,19 @@
                 tools:text="@string/entry_departure" />
 
             <TextView
+                android:id="@+id/displayRealDeparture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldRealDeparture"
+                tools:text="@string/entry_real_departure" />
+
+            <TextView
                 android:id="@+id/displayArrival"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -206,6 +271,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fieldArrival"
                 tools:text="@string/entry_arrival" />
+
+            <TextView
+                android:id="@+id/displayRealArrival"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldRealArrival"
+                tools:text="@string/entry_real_arrival" />
 
             <TextView
                 android:id="@+id/displayName"
@@ -271,6 +349,34 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fieldCar"
                 tools:text="@string/entry_car" />
+
+            <TextView
+                android:id="@+id/displaySeries"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldSeries"
+                tools:text="@string/entry_series" />
+
+            <TextView
+                android:id="@+id/displayComments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldComments"
+                tools:text="@string/entry_comments" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

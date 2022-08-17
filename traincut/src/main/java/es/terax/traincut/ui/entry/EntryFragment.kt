@@ -19,11 +19,14 @@
 
 package es.terax.traincut.ui.entry
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -69,12 +72,18 @@ class EntryFragment : Fragment() {
         val inputOrigin = binding.inputOrigin
         val inputDestination = binding.inputDestination
         val inputDeparture = binding.inputDeparture
+        val checkBoxDeparture = binding.checkBoxDeparture
+        val inputRealDepart = binding.inputRealDeparture
         val inputArrival = binding.inputArrival
+        val checkBoxArrival = binding.checkBoxArrival
+        val inputRealArrival = binding.inputRealArrival
         val inputName = binding.inputName
         val inputTrainNumber = binding.inputTrainNumber
         val inputSeat = binding.inputSeat
         val inputSeatClass = binding.inputSeatClass
         val inputCar = binding.inputCar
+        val inputSeries = binding.inputSeries
+        val inputComments = binding.inputComments
 
         val entryData: EntryModel
 
@@ -109,8 +118,34 @@ class EntryFragment : Fragment() {
             } else {
                 entryData.entryCar.toString()
             })
+            if (entryData.entryRealDepart == 0.toLong()) {
+                binding.fieldRealDeparture.visibility = View.GONE
+            } else {
+                checkBoxDeparture.isChecked = true
+
+                // We convert the date into a human readable format.
+                val realDepartDateTime = LocalDateTime.ofEpochSecond(entryData.entryRealDepart,0,
+                    ZoneOffset.UTC)
+                val realDepartFormatted: String = realDepartDateTime.format(format)
+                inputRealDepart.setText(realDepartFormatted)
+            }
+            if (entryData.entryRealArrival == 0.toLong()) {
+                binding.fieldRealArrival.visibility = View.GONE
+            } else {
+                checkBoxArrival.isChecked = true
+
+                // We convert the date into a human readable format.
+                val realArrivalDateTime = LocalDateTime.ofEpochSecond(entryData.entryRealArrival,0,
+                    ZoneOffset.UTC)
+                val realArrivalFormatted: String = realArrivalDateTime.format(format)
+                inputRealArrival.setText(realArrivalFormatted)
+            }
+            inputSeries.setText(entryData.entrySeries)
+            inputComments.setText(entryData.entryComments)
         } else {
             entryData = EntryModel()
+            binding.fieldRealDeparture.visibility = View.GONE
+            binding.fieldRealArrival.visibility = View.GONE
         }
 
         topAppBar.setNavigationOnClickListener {
@@ -119,6 +154,7 @@ class EntryFragment : Fragment() {
                     .setTitle(resources.getString(R.string.entry_unsaved_dialog))
                     .setMessage(resources.getString(R.string.entry_unsaved_dialog_desc))
                     .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
+                        hideKeyboard()
                         root.findNavController().navigateUp()
                     }
                     .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
@@ -149,12 +185,21 @@ class EntryFragment : Fragment() {
                         emptyFields = true
                         binding.fieldDeparture.error = errorString
                     }
+                    if (checkBoxDeparture.isChecked && inputRealDepart.text.toString().isEmpty()) {
+                        emptyFields = true
+                        binding.fieldRealDeparture.error = errorString
+                    }
                     if (inputArrival.text.toString().isEmpty()) {
                         emptyFields = true
                         binding.fieldArrival.error = errorString
                     }
+                    if (checkBoxArrival.isChecked && inputRealArrival.text.toString().isEmpty()) {
+                        emptyFields = true
+                        binding.fieldRealArrival.error = errorString
+                    }
 
                     if (args.isEdit && !emptyFields) {
+                        hideKeyboard()
                         // We convert the date into seconds since epoch.
                         val format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
                             FormatStyle.SHORT)
@@ -180,12 +225,25 @@ class EntryFragment : Fragment() {
                             },
                             0.00,
                             "",
-                            "",
-                            "",
-                            "",
-                            "")
+                            if (checkBoxDeparture.isChecked) {
+                                val realDepartDate =
+                                    LocalDateTime.parse(inputRealDepart.text.toString(), format)
+                                realDepartDate.toEpochSecond(ZoneOffset.UTC)
+                            } else {
+                                0
+                            },
+                            if (checkBoxArrival.isChecked) {
+                                val realArrivalDate =
+                                    LocalDateTime.parse(inputRealArrival.text.toString(), format)
+                                realArrivalDate.toEpochSecond(ZoneOffset.UTC)
+                            } else {
+                                0
+                            },
+                            inputSeries.text.toString(),
+                            inputComments.text.toString())
                         root.findNavController().navigateUp()
                     } else if (!emptyFields) {
+                        hideKeyboard()
                         // We convert the date into seconds since epoch.
                         val format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
                             FormatStyle.SHORT)
@@ -210,10 +268,22 @@ class EntryFragment : Fragment() {
                             },
                             0.0,
                             "",
-                            "",
-                            "",
-                            "",
-                            "")
+                            if (checkBoxDeparture.isChecked) {
+                                val realDepartDate =
+                                    LocalDateTime.parse(inputRealDepart.text.toString(), format)
+                                realDepartDate.toEpochSecond(ZoneOffset.UTC)
+                            } else {
+                                0
+                            },
+                            if (checkBoxArrival.isChecked) {
+                                val realArrivalDate =
+                                    LocalDateTime.parse(inputRealArrival.text.toString(), format)
+                                realArrivalDate.toEpochSecond(ZoneOffset.UTC)
+                            } else {
+                                0
+                            },
+                            inputSeries.text.toString(),
+                            inputComments.text.toString())
                         root.findNavController().navigateUp()
                     }
                     true
@@ -261,6 +331,42 @@ class EntryFragment : Fragment() {
         inputCar.doOnTextChanged { _, _, _, _ ->
             hasChanged(entryData)
         }
+        checkBoxDeparture.setOnCheckedChangeListener { _, b ->
+            binding.fieldRealDeparture.visibility = if (b) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+            hasChanged(entryData)
+        }
+        checkBoxArrival.setOnCheckedChangeListener { _, b ->
+            binding.fieldRealArrival.visibility = if (b) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+            hasChanged(entryData)
+        }
+        inputRealDepart.doOnTextChanged { text, _, _, _ ->
+            validateInput(binding.fieldRealDeparture, text)
+            hasChanged(entryData)
+        }
+        inputRealDepart.setOnClickListener {
+                showDateTimePickerDialog(binding.fieldRealDeparture, inputRealDepart)
+        }
+        inputRealArrival.doOnTextChanged { text, _, _, _ ->
+            validateInput(binding.fieldRealArrival, text)
+            hasChanged(entryData)
+        }
+        inputRealArrival.setOnClickListener {
+            showDateTimePickerDialog(binding.fieldRealArrival, inputRealArrival)
+        }
+        inputSeries.doOnTextChanged{ _, _, _, _ ->
+            hasChanged(entryData)
+        }
+        inputComments.doOnTextChanged{ _, _, _, _ ->
+            hasChanged(entryData)
+        }
 
         return root
     }
@@ -289,6 +395,14 @@ class EntryFragment : Fragment() {
                 cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SEAT_CLASS))
             entryModel.entryCar =
                 cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_CAR))
+            entryModel.entryRealDepart =
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_REAL_DEPART))
+            entryModel.entryRealArrival =
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_REAL_ARRIVAL))
+            entryModel.entrySeries =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SERIES))
+            entryModel.entryComments =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_COMMENTS))
             entryModel
         } else {
             MaterialAlertDialogBuilder(requireContext())
@@ -399,12 +513,18 @@ class EntryFragment : Fragment() {
         val dataInputs = arrayOf(binding.inputOrigin,
             binding.inputDestination,
             binding.inputDeparture,
+            binding.inputRealDeparture,
             binding.inputArrival,
+            binding.inputRealArrival,
             binding.inputName,
             binding.inputTrainNumber,
             binding.inputSeat,
             binding.inputSeatClass,
-            binding.inputCar)
+            binding.inputCar,
+            binding.inputSeries,
+            binding.inputComments)
+        val boolInputs = arrayOf(binding.checkBoxDeparture.isChecked,
+            binding.checkBoxArrival.isChecked)
         for (userInput in dataInputs) {
             val format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
                 FormatStyle.SHORT)
@@ -418,12 +538,26 @@ class EntryFragment : Fragment() {
                         ZoneOffset.UTC)
                     departDateTime.format(format)
                 }
+                binding.inputRealDeparture -> if (entryData.entryRealDepart == 0.toLong()) {
+                    ""
+                } else {
+                    val realDepartDateTime = LocalDateTime.ofEpochSecond(entryData.entryRealDepart,0,
+                        ZoneOffset.UTC)
+                    realDepartDateTime.format(format)
+                }
                 binding.inputArrival -> if (entryData.entryArrival == 0.toLong()) {
                     ""
                 } else {
                     val arrivalDateTime = LocalDateTime.ofEpochSecond(entryData.entryArrival, 0,
                         ZoneOffset.UTC)
                         arrivalDateTime.format(format)
+                }
+                binding.inputRealArrival -> if (entryData.entryRealArrival == 0.toLong()) {
+                    ""
+                } else {
+                    val realArrivalDateTime = LocalDateTime.ofEpochSecond(entryData.entryRealArrival,0,
+                        ZoneOffset.UTC)
+                    realArrivalDateTime.format(format)
                 }
                 binding.inputName -> entryData.entryName
                 binding.inputTrainNumber -> if (entryData.entryTrainNumber == 0) {
@@ -433,19 +567,41 @@ class EntryFragment : Fragment() {
                 }
                 binding.inputSeat -> entryData.entrySeat
                 binding.inputSeatClass -> entryData.entrySeatClass
-                else -> if (entryData.entryCar == 0) {
+                binding.inputCar -> if (entryData.entryCar == 0) {
                     ""
                 } else {
                     entryData.entryCar.toString()
                 }
+                binding.inputSeries -> entryData.entrySeries
+                else -> entryData.entryComments
             }
             if (userInput.text.toString() != userData) {
                 binding.topAppBar.menu.findItem(R.id.actionSave).isEnabled = true
                 return true
             }
         }
+        for (userInput in boolInputs) {
+            val userData = when (userInput) {
+                binding.checkBoxDeparture.isChecked -> entryData.entryRealDepart != 0.toLong()
+                else -> entryData.entryRealArrival != 0.toLong()
+            }
+            if (userInput != userData) {
+                binding.topAppBar.menu.findItem(R.id.actionSave).isEnabled = true
+                return true
+            }
+        }
         binding.topAppBar.menu.findItem(R.id.actionSave).isEnabled = false
         return false
+    }
+
+    // Hide keyboard on demand.
+    private fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroyView() {

@@ -58,12 +58,16 @@ class ViewFragment: Fragment() {
         val inputOrigin = binding.displayOrigin
         val inputDestination = binding.displayDestination
         val inputDeparture = binding.displayDeparture
+        val inputRealDeparture = binding.displayRealDeparture
         val inputArrival = binding.displayArrival
+        val inputRealArrival = binding.displayRealArrival
         val inputName = binding.displayName
         val inputTrainNumber = binding.displayTrainNumber
         val inputSeat = binding.displaySeat
         val inputSeatClass = binding.displaySeatClass
         val inputCar = binding.displayCar
+        val inputSeries = binding.displaySeries
+        val inputComments = binding.displayComments
 
         val entryData = getEntryData(args.positionId, databaseHandler)
         inputOrigin.text = entryData.entryOrigin
@@ -82,6 +86,26 @@ class ViewFragment: Fragment() {
         inputArrival.text = arrivalFormatted
 
         // We proceed to hide empty optional fields (or keep showing available info).
+        if (entryData.entryRealDepart == 0.toLong()) {
+            binding.fieldRealDeparture.visibility = View.GONE
+            inputRealDeparture.visibility = View.GONE
+        } else {
+            // We convert the date into a human readable format.
+            val realDepartDateTime = LocalDateTime.ofEpochSecond(entryData.entryRealDepart,0,
+                ZoneOffset.UTC)
+            val realDepartFormatted: String = realDepartDateTime.format(format)
+            inputRealDeparture.text = realDepartFormatted
+        }
+        if (entryData.entryRealArrival == 0.toLong()) {
+            binding.fieldRealArrival.visibility = View.GONE
+            inputRealArrival.visibility = View.GONE
+        } else {
+            // We convert the date into a human readable format.
+            val realArrivalDateTime = LocalDateTime.ofEpochSecond(entryData.entryRealArrival,0,
+                ZoneOffset.UTC)
+            val realArrivalFormatted: String = realArrivalDateTime.format(format)
+            inputRealArrival.text = realArrivalFormatted
+        }
         if (entryData.entryName.isEmpty()) {
             binding.fieldName.visibility = View.GONE
             inputName.visibility = View.GONE
@@ -112,6 +136,19 @@ class ViewFragment: Fragment() {
         } else {
             inputCar.text = entryData.entryCar.toString()
         }
+        if (entryData.entrySeries.isEmpty()) {
+            binding.fieldSeries.visibility = View.GONE
+            inputSeries.visibility = View.GONE
+        } else {
+            inputSeries.text = entryData.entrySeries
+        }
+        if (entryData.entryComments.isEmpty()) {
+            binding.fieldComments.visibility = View.GONE
+            inputComments.visibility = View.INVISIBLE
+        } else {
+            inputComments.text = entryData.entryComments
+        }
+
         topAppBar.setNavigationOnClickListener {
             root.findNavController().navigateUp()
         }
@@ -169,6 +206,14 @@ class ViewFragment: Fragment() {
                 cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SEAT_CLASS))
             entryModel.entryCar =
                 cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_CAR))
+            entryModel.entryRealDepart =
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_REAL_DEPART))
+            entryModel.entryRealArrival =
+                cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_REAL_ARRIVAL))
+            entryModel.entrySeries =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SERIES))
+            entryModel.entryComments =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_COMMENTS))
             entryModel
         } else {
             MaterialAlertDialogBuilder(requireContext())

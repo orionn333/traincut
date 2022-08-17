@@ -24,7 +24,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.util.*
 
 class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION){
@@ -48,7 +47,7 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     // TODO: Change string for datetime.
     fun insertRow(origin: String, destination: String, departure: Long, arrival: Long,
     name: String, trainNumber: Int, seat: String, seatClass: String, car: Int, cost: Double,
-    currency: String, realDeparture: String, realArrival: String, series: String, comments: String) {
+    currency: String, realDeparture: Long, realArrival: Long, series: String, comments: String) {
         val values = ContentValues()
         values.put(COLUMN_ORIGIN, origin)
         values.put(COLUMN_DESTINATION, destination)
@@ -74,8 +73,8 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     // TODO: Change string for datetime.
     fun updateRow(rowId: String, origin: String, destination: String, departure: Long,
                   arrival: Long, name: String, trainNumber: Int, seat: String, seatClass: String,
-                  car: Int, cost: Double, currency: String, realDeparture: String,
-                  realArrival: String, series: String, comments: String) {
+                  car: Int, cost: Double, currency: String, realDeparture: Long,
+                  realArrival: Long, series: String, comments: String) {
         val values = ContentValues()
         values.put(COLUMN_ORIGIN, origin)
         values.put(COLUMN_DESTINATION, destination)

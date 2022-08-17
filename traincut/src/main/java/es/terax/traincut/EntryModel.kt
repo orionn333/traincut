@@ -33,8 +33,8 @@ class EntryModel {
     var entryCar: Int = 0
     var entryCost: Double = 0.00
     var entryCurrency: String = ""
-    var entryRealDepart: String = ""
-    var entryRealArrival: String = ""
+    var entryRealDepart: Long = 0
+    var entryRealArrival: Long = 0
     var entrySeries: String = ""
     var entryComments: String = ""
 }
