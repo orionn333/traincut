@@ -40,6 +40,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <Space
+                android:id="@+id/space"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fieldArrival" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fieldOrigin"
                 android:layout_width="0dp"
@@ -59,6 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="50"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -82,6 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="50"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -110,6 +121,7 @@
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/fieldArrival"
                 android:layout_width="0dp"
@@ -131,6 +143,123 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="none|datetime"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/entry_name"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toStartOf="@+id/space"
+                app:layout_constraintStart_toStartOf="@+id/fieldArrival"
+                app:layout_constraintTop_toBottomOf="@+id/fieldArrival"
+                app:layout_constraintWidth_max="190dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName|textCapSentences"
+                    android:maxLength="50"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldTrainNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/entry_train_number"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/fieldArrival"
+                app:layout_constraintStart_toEndOf="@+id/space"
+                app:layout_constraintTop_toBottomOf="@+id/fieldArrival"
+                app:layout_constraintWidth_max="190dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputTrainNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none|number"
+                    android:maxLength="10"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldSeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/entry_seat"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toStartOf="@+id/space"
+                app:layout_constraintStart_toStartOf="@+id/fieldArrival"
+                app:layout_constraintTop_toBottomOf="@+id/fieldName"
+                app:layout_constraintWidth_max="190dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputSeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textUri|none"
+                    android:maxLength="5"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldSeatClass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/entry_seat_class"
+                app:endIconMode="clear_text"
+                app:layout_constraintEnd_toEndOf="@+id/fieldArrival"
+                app:layout_constraintStart_toEndOf="@+id/space"
+                app:layout_constraintTop_toBottomOf="@+id/fieldName"
+                app:layout_constraintWidth_max="190dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputSeatClass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none|textCapSentences"
+                    android:maxLength="25"
+                    tools:ignore="TextContrastCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fieldCar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:hint="@string/entry_car"
+                app:endIconMode="clear_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/space"
+                app:layout_constraintStart_toStartOf="@+id/fieldArrival"
+                app:layout_constraintTop_toBottomOf="@+id/fieldSeat"
+                app:layout_constraintWidth_max="190dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputCar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none|number"
+                    android:maxLength="2"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>

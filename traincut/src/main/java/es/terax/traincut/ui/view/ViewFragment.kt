@@ -59,6 +59,11 @@ class ViewFragment: Fragment() {
         val inputDestination = binding.displayDestination
         val inputDeparture = binding.displayDeparture
         val inputArrival = binding.displayArrival
+        val inputName = binding.displayName
+        val inputTrainNumber = binding.displayTrainNumber
+        val inputSeat = binding.displaySeat
+        val inputSeatClass = binding.displaySeatClass
+        val inputCar = binding.displayCar
 
         val entryData = getEntryData(args.positionId, databaseHandler)
         inputOrigin.text = entryData.entryOrigin
@@ -75,6 +80,38 @@ class ViewFragment: Fragment() {
         val arrivalFormatted: String = arrivalDateTime.format(format)
         inputDeparture.text = departFormatted
         inputArrival.text = arrivalFormatted
+
+        // We proceed to hide empty optional fields (or keep showing available info).
+        if (entryData.entryName.isEmpty()) {
+            binding.fieldName.visibility = View.GONE
+            inputName.visibility = View.GONE
+        } else {
+            inputName.text = entryData.entryName
+        }
+        if (entryData.entryTrainNumber == 0) {
+            binding.fieldTrainNumber.visibility = View.GONE
+            inputTrainNumber.visibility = View.GONE
+        } else {
+            inputTrainNumber.text = entryData.entryTrainNumber.toString()
+        }
+        if (entryData.entrySeat.isEmpty()) {
+            binding.fieldSeat.visibility = View.GONE
+            inputSeat.visibility = View.GONE
+        } else {
+            inputSeat.text = entryData.entrySeat
+        }
+        if (entryData.entrySeatClass.isEmpty()) {
+            binding.fieldSeatClass.visibility = View.GONE
+            inputSeatClass.visibility = View.GONE
+        } else {
+            inputSeatClass.text = entryData.entrySeatClass
+        }
+        if (entryData.entryCar == 0) {
+            binding.fieldCar.visibility = View.GONE
+            inputCar.visibility = View.GONE
+        } else {
+            inputCar.text = entryData.entryCar.toString()
+        }
         topAppBar.setNavigationOnClickListener {
             root.findNavController().navigateUp()
         }
@@ -95,7 +132,7 @@ class ViewFragment: Fragment() {
                         .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
                             // Abort the entry deletion.
                         }
-                        .setPositiveButton(resources.getString(R.string.accept)) { _, _ ->
+                        .setPositiveButton(resources.getString(R.string.view_delete)) { _, _ ->
                             // Proceed with the entry deletion.
                             databaseHandler.deleteRow(args.entryId.toString())
                             findNavController().navigateUp()
@@ -122,6 +159,16 @@ class ViewFragment: Fragment() {
                 cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DEPARTURE))
             entryModel.entryArrival =
                 cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ARRIVAL))
+            entryModel.entryName =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_NAME))
+            entryModel.entryTrainNumber =
+                cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_TRAIN_NUMBER))
+            entryModel.entrySeat =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SEAT))
+            entryModel.entrySeatClass =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SEAT_CLASS))
+            entryModel.entryCar =
+                cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_CAR))
             entryModel
         } else {
             MaterialAlertDialogBuilder(requireContext())

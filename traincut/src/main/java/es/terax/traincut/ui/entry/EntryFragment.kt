@@ -70,13 +70,19 @@ class EntryFragment : Fragment() {
         val inputDestination = binding.inputDestination
         val inputDeparture = binding.inputDeparture
         val inputArrival = binding.inputArrival
-        topAppBar.setNavigationOnClickListener {
-            root.findNavController().navigateUp()
-        }
+        val inputName = binding.inputName
+        val inputTrainNumber = binding.inputTrainNumber
+        val inputSeat = binding.inputSeat
+        val inputSeatClass = binding.inputSeatClass
+        val inputCar = binding.inputCar
+
+        val entryData: EntryModel
+
         if (args.isEdit) {
+            binding.topAppBar.menu.findItem(R.id.actionSave).isEnabled = false
             topAppBar.title = getString(R.string.edit_entry)
             // Now, we load the entry data from the ID provided by the action argument.
-            val entryData = getEntryData(args.positionId)
+            entryData = getEntryData(args.positionId)
             inputOrigin.setText(entryData.entryOrigin)
             inputDestination.setText(entryData.entryDestination)
             // We convert the date into a human readable format.
@@ -90,6 +96,38 @@ class EntryFragment : Fragment() {
             val arrivalFormatted: String = arrivalDateTime.format(format)
             inputDeparture.setText(departFormatted)
             inputArrival.setText(arrivalFormatted)
+            inputName.setText(entryData.entryName)
+            inputTrainNumber.setText(if (entryData.entryTrainNumber == 0) {
+                null
+            } else {
+                entryData.entryTrainNumber.toString()
+            })
+            inputSeat.setText(entryData.entrySeat)
+            inputSeatClass.setText(entryData.entrySeatClass)
+            inputCar.setText(if (entryData.entryCar == 0) {
+                null
+            } else {
+                entryData.entryCar.toString()
+            })
+        } else {
+            entryData = EntryModel()
+        }
+
+        topAppBar.setNavigationOnClickListener {
+            if (hasChanged(entryData)) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(resources.getString(R.string.entry_unsaved_dialog))
+                    .setMessage(resources.getString(R.string.entry_unsaved_dialog_desc))
+                    .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
+                        root.findNavController().navigateUp()
+                    }
+                    .setNeutralButton(resources.getString(R.string.cancel)) { _, _ ->
+                        // Abort navigation up.
+                    }
+                    .show()
+            } else {
+                root.findNavController().navigateUp()
+            }
         }
         topAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId)
@@ -127,11 +165,19 @@ class EntryFragment : Fragment() {
                             inputDestination.text.toString(),
                             departDate.toEpochSecond(ZoneOffset.UTC),
                             arrivalDate.toEpochSecond(ZoneOffset.UTC),
-                            "",
-                            0,
-                            "",
-                            "",
-                            0,
+                            inputName.text.toString(),
+                            if (inputTrainNumber.text.toString().isEmpty()) {
+                                0
+                            } else {
+                                inputTrainNumber.text.toString().toInt()
+                            },
+                            inputSeat.text.toString(),
+                            inputSeatClass.text.toString(),
+                            if (inputCar.text.toString().isEmpty()) {
+                                0
+                            } else {
+                                inputCar.text.toString().toInt()
+                            },
                             0.00,
                             "",
                             "",
@@ -149,11 +195,19 @@ class EntryFragment : Fragment() {
                             inputDestination.text.toString(),
                             departDate.toEpochSecond(ZoneOffset.UTC),
                             arrivalDate.toEpochSecond(ZoneOffset.UTC),
-                            "",
-                            0,
-                            "",
-                            "",
-                            0,
+                            inputName.text.toString(),
+                            if (inputTrainNumber.text.toString().isEmpty()) {
+                                0
+                            } else {
+                                inputTrainNumber.text.toString().toInt()
+                            },
+                            inputSeat.text.toString(),
+                            inputSeatClass.text.toString(),
+                            if (inputCar.text.toString().isEmpty()) {
+                                0
+                            } else {
+                                inputCar.text.toString().toInt()
+                            },
                             0.0,
                             "",
                             "",
@@ -171,20 +225,41 @@ class EntryFragment : Fragment() {
         // We listen for text input in mandatory fields in order to remove any possible
         // empty field error just at the moment the user enters some text.
         inputOrigin.doOnTextChanged { text, _, _, _ ->
-            validateInput(binding.fieldOrigin, text)}
+            validateInput(binding.fieldOrigin, text)
+            hasChanged(entryData)
+        }
         inputDestination.doOnTextChanged { text, _, _, _ ->
-            validateInput(binding.fieldDestination, text)}
+            validateInput(binding.fieldDestination, text)
+            hasChanged(entryData)
+        }
         inputDeparture.doOnTextChanged { text, _, _, _ ->
             validateInput(binding.fieldDeparture, text)
+            hasChanged(entryData)
         }
         inputDeparture.setOnClickListener{
             showDateTimePickerDialog(binding.fieldDeparture, inputDeparture)
         }
         inputArrival.doOnTextChanged { text, _, _, _ ->
             validateInput(binding.fieldArrival, text)
+            hasChanged(entryData)
         }
         inputArrival.setOnClickListener {
             showDateTimePickerDialog(binding.fieldArrival, inputArrival)
+        }
+        inputName.doOnTextChanged { _, _, _, _ ->
+            hasChanged(entryData)
+        }
+        inputTrainNumber.doOnTextChanged { _, _, _, _ ->
+            hasChanged(entryData)
+        }
+        inputSeat.doOnTextChanged { _, _, _, _ ->
+            hasChanged(entryData)
+        }
+        inputSeatClass.doOnTextChanged { _, _, _, _ ->
+            hasChanged(entryData)
+        }
+        inputCar.doOnTextChanged { _, _, _, _ ->
+            hasChanged(entryData)
         }
 
         return root
@@ -204,6 +279,16 @@ class EntryFragment : Fragment() {
                 cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_DEPARTURE))
             entryModel.entryArrival =
                 cursor.getLong(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_ARRIVAL))
+            entryModel.entryName =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_NAME))
+            entryModel.entryTrainNumber =
+                cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_TRAIN_NUMBER))
+            entryModel.entrySeat =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SEAT))
+            entryModel.entrySeatClass =
+                cursor.getString(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_SEAT_CLASS))
+            entryModel.entryCar =
+                cursor.getInt(cursor.getColumnIndexOrThrow(SQLHelper.COLUMN_CAR))
             entryModel
         } else {
             MaterialAlertDialogBuilder(requireContext())
@@ -308,6 +393,59 @@ class EntryFragment : Fragment() {
             //Log.d("TimePickerDialog", "Time selection dialog was dismissed.")
         }
         timePicker.show(fragmentManager, "TimePickerDialog")
+    }
+
+    private fun hasChanged(entryData: EntryModel): Boolean {
+        val dataInputs = arrayOf(binding.inputOrigin,
+            binding.inputDestination,
+            binding.inputDeparture,
+            binding.inputArrival,
+            binding.inputName,
+            binding.inputTrainNumber,
+            binding.inputSeat,
+            binding.inputSeatClass,
+            binding.inputCar)
+        for (userInput in dataInputs) {
+            val format = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM,
+                FormatStyle.SHORT)
+            val userData = when (userInput) {
+                binding.inputOrigin -> entryData.entryOrigin
+                binding.inputDestination -> entryData.entryDestination
+                binding.inputDeparture -> if (entryData.entryDeparture == 0.toLong()) {
+                    ""
+                } else {
+                    val departDateTime = LocalDateTime.ofEpochSecond(entryData.entryDeparture,0,
+                        ZoneOffset.UTC)
+                    departDateTime.format(format)
+                }
+                binding.inputArrival -> if (entryData.entryArrival == 0.toLong()) {
+                    ""
+                } else {
+                    val arrivalDateTime = LocalDateTime.ofEpochSecond(entryData.entryArrival, 0,
+                        ZoneOffset.UTC)
+                        arrivalDateTime.format(format)
+                }
+                binding.inputName -> entryData.entryName
+                binding.inputTrainNumber -> if (entryData.entryTrainNumber == 0) {
+                    ""
+                } else {
+                    entryData.entryTrainNumber.toString()
+                }
+                binding.inputSeat -> entryData.entrySeat
+                binding.inputSeatClass -> entryData.entrySeatClass
+                else -> if (entryData.entryCar == 0) {
+                    ""
+                } else {
+                    entryData.entryCar.toString()
+                }
+            }
+            if (userInput.text.toString() != userData) {
+                binding.topAppBar.menu.findItem(R.id.actionSave).isEnabled = true
+                return true
+            }
+        }
+        binding.topAppBar.menu.findItem(R.id.actionSave).isEnabled = false
+        return false
     }
 
     override fun onDestroyView() {
