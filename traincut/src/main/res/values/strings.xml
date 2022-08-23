@@ -27,11 +27,15 @@
 
     <!-- Entry fragment -->
     <string name="entry_origin">Origin</string>
+    <string name="entry_origin_mandatory">Origin*</string>
     <string name="entry_destination">Destination</string>
+    <string name="entry_destination_mandatory">Destination*</string>
     <string name="entry_departure">Departure</string>
+    <string name="entry_departure_mandatory">Departure*</string>
     <string name="entry_late_departure">The train departed late</string>
     <string name="entry_real_departure">Real departure</string>
     <string name="entry_arrival">Arrival</string>
+    <string name="entry_arrival_mandatory">Arrival*</string>
     <string name="entry_late_arrival">The train arrived late</string>
     <string name="entry_real_arrival">Real arrival</string>
     <string name="entry_name">Train service</string>

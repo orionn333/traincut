@@ -32,14 +32,14 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import kotlin.collections.ArrayList
+
 
 class LogAdapter(private val dataList: ArrayList<EntryModel>,
                  private val context: Context,
                  private val navController: NavController) :
     RecyclerView.Adapter<LogAdapter.ViewHolder>() {
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class ViewHolder(view: View, val viewCard: Boolean) : RecyclerView.ViewHolder(view){
         val viewBinding = ListCardBinding.bind(view)
 
         fun setListener(dataListed: EntryModel){
@@ -53,32 +53,46 @@ class LogAdapter(private val dataList: ArrayList<EntryModel>,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.list_card, parent, false)
-        return ViewHolder(view)
+        return if (viewType == VIEW_TYPE_ITEM) {
+            val view: View =
+                LayoutInflater.from(context).inflate(R.layout.list_card, parent, false)
+            ViewHolder(view, true)
+        } else {
+            val view: View =
+                LayoutInflater.from(context).inflate(R.layout.list_loading, parent, false)
+            ViewHolder(view, false)
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val entryModel: EntryModel = dataList[position]
+        if (holder.viewCard) {
+            val entryModel: EntryModel = dataList[position]
 
-        holder.viewBinding.textOrigin.text = entryModel.entryOrigin
-        holder.viewBinding.textDestination.text = entryModel.entryDestination
-        // We convert the date into a human readable format.
-        val departDateTime = LocalDateTime.ofEpochSecond(entryModel.entryDeparture,0,
-            ZoneOffset.UTC)
-        val arrivalDateTime = LocalDateTime.ofEpochSecond(entryModel.entryArrival, 0,
-            ZoneOffset.UTC)
-        val format = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
-        val formatted: String = departDateTime.format(format)
-        holder.viewBinding.textDate.text = formatted
-        val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-        val departureTime: String = departDateTime.format(timeFormat)
-        val arrivalTime: String = arrivalDateTime.format(timeFormat)
-        holder.viewBinding.originTime.text = departureTime
-        holder.viewBinding.destinationTime.text = arrivalTime
-        holder.setListener(entryModel)
+            holder.viewBinding.textOrigin.text = entryModel.entryOrigin
+            holder.viewBinding.textDestination.text = entryModel.entryDestination
+            // We convert the date into a human readable format.
+            val departDateTime = LocalDateTime.ofEpochSecond(entryModel.entryDeparture,0,
+                ZoneOffset.UTC)
+            val arrivalDateTime = LocalDateTime.ofEpochSecond(entryModel.entryArrival, 0,
+                ZoneOffset.UTC)
+            val format = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)
+            val formatted: String = departDateTime.format(format)
+            holder.viewBinding.textDate.text = formatted
+            val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+            val departureTime: String = departDateTime.format(timeFormat)
+            val arrivalTime: String = arrivalDateTime.format(timeFormat)
+            holder.viewBinding.originTime.text = departureTime
+            holder.viewBinding.destinationTime.text = arrivalTime
+            holder.setListener(entryModel)
+        }
     }
 
     override fun getItemCount(): Int {
         return dataList.size
+    }
+
+    companion object {
+        const val VIEW_TYPE_ITEM = 0
+        const val VIEW_TYPE_LOADING = 1
     }
 }

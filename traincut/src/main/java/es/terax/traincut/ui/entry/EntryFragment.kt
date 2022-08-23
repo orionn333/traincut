@@ -142,6 +142,10 @@ class EntryFragment : Fragment() {
             }
             inputSeries.setText(entryData.entrySeries)
             inputComments.setText(entryData.entryComments)
+            validateInput(binding.fieldOrigin, inputOrigin.text, focusMode=true, focus=true)
+            validateInput(binding.fieldDestination, inputDestination.text, focusMode=true, focus=true)
+            validateInput(binding.fieldDeparture, inputDeparture.text, focusMode=true, focus=true)
+            validateInput(binding.fieldArrival, inputArrival.text, focusMode=true, focus=true)
         } else {
             entryData = EntryModel()
             binding.fieldRealDeparture.visibility = View.GONE
@@ -298,9 +302,15 @@ class EntryFragment : Fragment() {
             validateInput(binding.fieldOrigin, text)
             hasChanged(entryData)
         }
+        inputOrigin.setOnFocusChangeListener { _, b ->
+            validateInput(binding.fieldOrigin, inputOrigin.text, true, b)
+        }
         inputDestination.doOnTextChanged { text, _, _, _ ->
             validateInput(binding.fieldDestination, text)
             hasChanged(entryData)
+        }
+        inputDestination.setOnFocusChangeListener { _, b ->
+            validateInput(binding.fieldDestination, inputDestination.text, true, b)
         }
         inputDeparture.doOnTextChanged { text, _, _, _ ->
             validateInput(binding.fieldDeparture, text)
@@ -418,11 +428,37 @@ class EntryFragment : Fragment() {
         }
     }
 
-    private fun validateInput(textInputLayout: TextInputLayout, text: CharSequence?)
+    private fun validateInput(textInputLayout: TextInputLayout,
+                              text: CharSequence?,
+                              focusMode: Boolean = false,
+                              focus: Boolean = false)
     {
-        if (text.toString().isNotEmpty())
+        if (text.toString().isNotEmpty() && !focusMode)
         {
             textInputLayout.error = null
+        }
+        if ((textInputLayout == binding.fieldOrigin ||
+            textInputLayout == binding.fieldDestination ||
+            textInputLayout == binding.fieldDeparture ||
+            textInputLayout == binding.fieldArrival) &&
+            focusMode) {
+            val hintResource = when (textInputLayout) {
+                binding.fieldOrigin -> R.string.entry_origin_mandatory
+                binding.fieldDestination -> R.string.entry_destination_mandatory
+                binding.fieldDeparture -> R.string.entry_departure_mandatory
+                else -> R.string.entry_arrival_mandatory
+            }
+            val hintNormalResource = when (textInputLayout) {
+                binding.fieldOrigin -> R.string.entry_origin
+                binding.fieldDestination -> R.string.entry_destination
+                binding.fieldDeparture -> R.string.entry_departure
+                else -> R.string.entry_arrival
+            }
+            if (focus) {
+                textInputLayout.hint = getString(hintNormalResource)
+            } else if (text.toString().isEmpty()){
+                textInputLayout.hint = getString(hintResource)
+            }
         }
     }
 
@@ -493,6 +529,7 @@ class EntryFragment : Fragment() {
             val formatted: String = localDateTime.format(format)
             textInputEditText.setText(formatted)
             textInputLayout.isEnabled = true
+            validateInput(textInputLayout, textInputEditText.text, focusMode=true, focus=true)
         }
         timePicker.addOnNegativeButtonClickListener {
             textInputLayout.isEnabled = true

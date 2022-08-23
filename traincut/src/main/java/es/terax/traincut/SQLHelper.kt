@@ -44,7 +44,6 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(dataBase)
     }
 
-    // TODO: Change string for datetime.
     fun insertRow(origin: String, destination: String, departure: Long, arrival: Long,
     name: String, trainNumber: Int, seat: String, seatClass: String, car: Int, cost: Double,
     currency: String, realDeparture: Long, realArrival: Long, series: String, comments: String) {
@@ -70,7 +69,6 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         dataBase.close()
     }
 
-    // TODO: Change string for datetime.
     fun updateRow(rowId: String, origin: String, destination: String, departure: Long,
                   arrival: Long, name: String, trainNumber: Int, seat: String, seatClass: String,
                   car: Int, cost: Double, currency: String, realDeparture: Long,
@@ -105,7 +103,7 @@ class SQLHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     fun getAllRow(): Cursor? {
         val dataBase = this.readableDatabase
-        return dataBase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+        return dataBase.rawQuery("SELECT * FROM $TABLE_NAME ORDER BY $COLUMN_DEPARTURE", null)
     }
 
     companion object {

@@ -42,7 +42,7 @@ class PreferencesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val preferencesViewModel =
-            ViewModelProvider(this).get(PreferencesViewModel::class.java)
+            ViewModelProvider(this)[PreferencesViewModel::class.java]
 
         _binding = FragmentPreferencesBinding.inflate(inflater, container, false)
         val root: View = binding.root
